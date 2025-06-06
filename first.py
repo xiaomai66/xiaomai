@@ -1,68 +1,38 @@
-import pandas as pd
 import streamlit as st
-
-st.title("🕶学生 小陈-数字档案")
-st.header("🔑 基础信息")
-st.text("学生ID:NEO-2023-001")
-#c1, c2, c3 = st.columns(3)
-st.markdown('注册时间: :green[2023-10-01 08:30:17] |精神状态:✅正常 ')
-st.markdown("当前教室: :green[实训楼301] |安全等级: :green[绝密]")
-
-st.subheader("Streamlit课程进度")
-st.progress(40,text="Streamlit课程进度")
-
-st.header("📊技能矩阵")
-# 定义列布局，分成3列
-c1, c2 ,c3= st.columns(3)
-c1.metric(label="C语言", value="99%", delta="3%")
-c2.metric(label="Python", value="90%", delta="-0.5%")
-c3.metric(label="Java", value="68%", delta="-5%")
-
-st.header("📝任务日志")
 import pandas as pd
-import streamlit as st
 
-# 定义数据
+# 定义数据,以便创建数据框
 data = {
-    '日期': ['2023-10-01', '2023-10-05', '2023-10-12'],
-    '任务': ['学生数学档案', '课程管理系统', '数据图表展示'],
-    '状态': ['✅完成', '🕒进行中', '❌未完成'],
-    '难度': ['★★☆☆☆', '★☆☆☆☆', '★★★☆☆'],
+    '月份':['01月', '02月', '03月'],
+    '1号门店':[200, 150, 180],
+    '2号门店':[120, 160, 123],
+    '3号门店':[110, 100, 160],
 }
-
-# 创建DataFrame
+# 根据上面创建的data，创建数据框
 df = pd.DataFrame(data)
+# 定义数据框所用的新索引
+index = pd.Series([1, 2, 3,], name='序号')
+# 将新索引应用到数据框上
+df.index = index
 
-# 定义样式函数 - 第二列(索引1)文字设为黄色
-def color_task_column(row):
-    colors = ['black'] * len(row)
-    colors[1] = 'yellow'  # 第二列索引为1
-    return [f'color: {color}' for color in colors]
+st.header("门店数据")
+# 使用write()方法展示数据框
+st.write(df)
+st.header("条形图")
 
-# 应用样式
-styled_df = df.style.apply(color_task_column, axis=1)
+st.subheader("设置x参数")
+# 通过x指定月份所在这一列为条形图的x轴
+st.bar_chart(df, x='月份')
 
-# 在Streamlit中显示带样式的数据框
-st.subheader("带样式的DataFrame")
-st.dataframe(styled_df, height=300)
+# 修改df，用月份列作为df的索引，替换原有的索引
+df.set_index('月份', inplace=True)
 
+st.subheader("设置y参数")
+# 通过y参数筛选只显示1号门店的数据
+st.bar_chart(df, y='1号门店')
+# 通过y参数筛选只显示2、3号门店的数据
+st.bar_chart(df, y=['2号门店','3号门店'])
 
-st.header("🔐最新代码成果")
-
-python_code = '''def matrix_breach():
-     while True:
-         if detect_vulnerability():
-             exploit()
-             return "ACCESS GRANTED"
-         else:
-                stealth_evade()")
-'''
-
-st.code(python_code)
-
-
-st.markdown(':green[`>>SYSTEM MESSAGE:`]下一个任务目标已解锁')
-st.markdown(' :green[`>>TARGET:`]课程管理系统')
-st.markdown(':green[`>>CUNTDOWN:`]2025-06-03 15：24：58')
-
-st.text("系统状态：在线 连接状态：已加密")
+st.subheader("设置width、height和use_container_width参数")
+# 通过width、height和use_container_width指定条形图的宽度和高度
+st.bar_chart(df, width=400, height=300, use_container_width=False)
