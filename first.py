@@ -120,7 +120,7 @@ def run_app():
     )
     
     # 指定文件路径
-    file_path = r'C:\Users\Lenovo\Desktop\supermarket_sales.xlsm'
+    file_path = r'supermarket_sales.xlsm'
     
     # 读取数据
     sale_df = get_dataframe_from_excel(file_path)
